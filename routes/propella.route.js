@@ -48,7 +48,7 @@ r.post('/', upload.any(), async (req, res) => {
       .json(new ErrorResponseObject(`These emails were rejected ${sendEmailResponse?.rejected?.toString()}`))
   }
 
-  return res.status(200).json(new SuccessResponseObject('Email send', {}))
+  return res.status(200).json(new SuccessResponseObject('Email send'))
 });
 
 module.exports = r;
