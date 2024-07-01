@@ -1,4 +1,5 @@
 exports.env = {
-  // add environment variables here; e.g
-  // sendgridApiKey: process.env.SENDGRID_API_KEY,
+  PROPELLA_TO_EMAIL: process.env.PROPELLA_TO_EMAIL,
+  PROPELLA_SENDER_EMAIL: process.env.PROPELLA_SENDER_EMAIL,
+  PROPELLA_SENDER_PASSWORD: process.env.PROPELLA_SENDER_PASSWORD,
 };

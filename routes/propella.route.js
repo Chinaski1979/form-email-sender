@@ -1,70 +1,54 @@
-const { Router } = require('express');
-const nodemailer = require("nodemailer");
-const multer = require('multer');
 const _ = require('lodash');
-const upload = multer();
+const multer = require('multer');
+const { env } = require('../config');
+const { Router } = require('express');
+const { cleanText } = require('../common/textUtils');
+const { FORM_NAME_KEY } = require('../common/variables');
+const { requestIsEmpty, anyEmailRejected } = require('../common/validations');
+const { createTransporter } = require('../email/transporter');
+const { createFilesObjectFromReq } = require('../common/filesUtils');
+const { propellaCommonTemplate } = require('../email/template/propella');
+const { SuccessResponseObject, ErrorResponseObject } = require('../common/http');
 
-const { SuccessResponseObject } = require('../common/http');
-const formNameKey = 'herso-form-name';
+const upload = multer();
 const r = Router();
 
-
-const formatText = (key) => {
-  if(!key) return '';
-  const cleanedKey = key.replace(/[-_]/gi, " ");
-  return _.capitalize(cleanedKey)
-}
-
-const gmailTransporter = nodemailer.createTransport({
-    service: "Gmail",
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: "kiimjohamorales5@gmail.com",
-      pass: "aezm wvau uonz zlbj",
-    },
-  });
+const propellaTransporter = createTransporter({
+  service: "Gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: env.PROPELLA_SENDER_EMAIL,
+    pass: env.PROPELLA_SENDER_PASSWORD,
+  },
+})
 
 r.post('/', upload.any(), async (req, res) => {
-  const formData = req.body;
-  const reqFiles = req.files;
-  const fields = Object.entries(formData)
-  const formName = _.get(formData, formNameKey);
+  if (requestIsEmpty(req)) {
+    return res
+      .status(404)
+      .json(new ErrorResponseObject('The body or files are required'))
+  }
 
-  const filesToSent = reqFiles?.map((file) => {
-    const base64Format = Buffer.from(file.buffer, 'ascii').toString('base64')
-    return {
-          filename: file.originalname,
-          content: base64Format,
-          encoding: 'base64'
-        }
-  })
-
-  const list = fields
-    .filter(([key]) => key !== formNameKey)
-    .map(([key, value]) => {
-    const buffer = Buffer.from(key, 'latin1');
-    const correctedText = buffer.toString('utf8');
-    return (`<li><b>${formatText(correctedText)}:</b> ${value}</li>`)
-
-  })
-
-  const shouldSentFiles = _.size(filesToSent) > 0
-
-  const info = await gmailTransporter.sendMail({
-    from: '"Un nuevo formulario desde Webflow" <kiimjohamorales5@gmail.com>',
-    to: "ol125@hotmail.es",
-    subject: `Nombre del formulario ${formName}`,
-    text: "Hello world?",
-    html: `<ul>${list.join('')}</ul>`,
-    ...shouldSentFiles ?  {attachments: filesToSent} : {}
-
+  const formName = _.get(req?.body, FORM_NAME_KEY);
+  const filesToSent = createFilesObjectFromReq(req?.files);
+  const template = propellaCommonTemplate(req?.body)
+  const sendEmailResponse = await propellaTransporter.sendMail({
+    from: `Un nuevo formulario desde Webflow <${env.PROPELLA_SENDER_EMAIL}>`,
+    to: env.PROPELLA_TO_EMAIL,
+    subject: `Nombre del formulario ${cleanText(formName)}`,
+    html: template,
+    attachments: filesToSent
   });
 
-  console.log({info});
+  if (!anyEmailRejected(sendEmailResponse)) {
+    return res
+      .status(404)
+      .json(new ErrorResponseObject(`These emails were rejected ${sendEmailResponse?.rejected?.toString()}`))
+  }
 
-  return res.sendStatus(200)
+  return res.status(200).json(new SuccessResponseObject('Email send', {}))
 });
 
 module.exports = r;
