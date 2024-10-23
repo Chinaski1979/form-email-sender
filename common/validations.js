@@ -1,9 +1,14 @@
-const { isEmpty } = require("lodash")
+const { isEmpty } = require("lodash");
 
-export const requestIsEmpty = (req) => {
+const requestIsEmpty = (req) => {
   const bodyIsEmpty = isEmpty(req?.body);
   const filesIsEmpty = isEmpty(req?.files);
-  return bodyIsEmpty && filesIsEmpty
-}
+  return bodyIsEmpty && filesIsEmpty;
+};
 
-export const anyEmailRejected = ({ rejected }) => isEmpty(rejected)
+const anyEmailRejected = ({ rejected }) => isEmpty(rejected);
+
+module.exports = {
+  requestIsEmpty,
+  anyEmailRejected,
+};

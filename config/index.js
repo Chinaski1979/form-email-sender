@@ -1,5 +1,12 @@
-exports.env = {
+require('dotenv').config();
+
+const CONFIG_ENV = {
   PROPELLA_TO_EMAIL: process.env.PROPELLA_TO_EMAIL,
   PROPELLA_SENDER_EMAIL: process.env.PROPELLA_SENDER_EMAIL,
   PROPELLA_SENDER_PASSWORD: process.env.PROPELLA_SENDER_PASSWORD,
+  MOBULA_TO_EMAIL: process.env.MOBULA_TO_EMAIL,
+  MOBULA_SENDER_EMAIL: process.env.MOBULA_SENDER_EMAIL,
+  MOBULA_SENDER_PASSWORD: process.env.MOBULA_SENDER_PASSWORD,
 };
+
+module.exports = { CONFIG_ENV };

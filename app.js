@@ -12,7 +12,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 app.use('/', routes);
 
-// default catch all handler
 app.all('*', (req, res) => res.status(404).json(new ErrorResponseObject('route not defined')));
+
+app.listen(3000, () => {
+    console.log(`Server is running on http://localhost:${3000}`);
+});
 
 module.exports = app;

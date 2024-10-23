@@ -5,25 +5,25 @@ const { Router } = require('express');
 const { requestIsEmpty, anyEmailRejected } = require('../common/validations');
 const { createTransporter } = require('../email/transporter');
 const { createFilesObjectFromReq } = require('../common/filesUtils');
-const { propellaCommonTemplate } = require('../email/template/propella');
+const { mobulaCommonTemplate } = require('../email/template/mobula');
 const { SuccessResponseObject, ErrorResponseObject } = require('../common/http');
-const { webFlowMiddleware } = require('../middleware/webflow');
+const { framerMiddleware } = require('../middleware/framer');
 
 const upload = multer();
 const r = Router();
 
-const propellaTransporter = createTransporter({
+const mobulaTransporter = createTransporter({
   service: "Gmail",
   host: "smtp.gmail.com",
   port: 465,
   secure: true,
   auth: {
-    user: CONFIG_ENV.PROPELLA_SENDER_EMAIL,
-    pass: CONFIG_ENV.PROPELLA_SENDER_PASSWORD,
+    user: CONFIG_ENV.MOBULA_SENDER_EMAIL,
+    pass: CONFIG_ENV.MOBULA_SENDER_PASSWORD,
   },
 })
 
-r.post('/', upload.any(), webFlowMiddleware, async (req, res) => {
+r.post('/', upload.any(), framerMiddleware, async (req, res) => {
   if (requestIsEmpty(req)) {
     return res
       .status(404)
@@ -31,10 +31,10 @@ r.post('/', upload.any(), webFlowMiddleware, async (req, res) => {
   }
 
   const filesToSent = createFilesObjectFromReq(req?.files);
-  const template = propellaCommonTemplate(req?.body.fields)
-  const sendEmailResponse = await propellaTransporter.sendMail({
-    from: `Un nuevo formulario desde Webflow <${CONFIG_ENV.PROPELLA_SENDER_EMAIL}>`,
-    to: env.PROPELLA_TO_EMAIL,
+  const template = mobulaCommonTemplate(req?.body.fields)
+  const sendEmailResponse = await mobulaTransporter.sendMail({
+    from: `Un nuevo formulario desde Mobula Framer <${CONFIG_ENV.MOBULA_SENDER_EMAIL}>`,
+    to: CONFIG_ENV.MOBULA_TO_EMAIL,
     subject: `Nombre del formulario ${req?.body.formName}`,
     html: template,
     attachments: filesToSent

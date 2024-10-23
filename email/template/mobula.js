@@ -1,4 +1,6 @@
-const propellaCommonTemplate = (fields) => {
+const mobulaCommonTemplate = (reqBody) => {
+  const fields = Object.entries(reqBody);
+
   const list = fields
     .map(([key, value]) => {
       return (
@@ -14,4 +16,4 @@ const propellaCommonTemplate = (fields) => {
   return `<ul>${list.join('')}</ul>`;
 };
 
-module.exports = { propellaCommonTemplate };
+module.exports = { mobulaCommonTemplate };
