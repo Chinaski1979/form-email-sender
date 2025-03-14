@@ -1,11 +1,21 @@
 const _ = require('lodash');
 const { CONFIG_ENV } = require('../../config');
 const { Router } = require('express');
-const { recipientMiddleware } = require('./../../middleware/recipient');
 const { anyEmailRejected } = require('../../common/validations');
-const { plannerAppTransporter } = require('./../../email/transporter');
-const { confirmationEventTemplate } = require('../../email/template/planner-app/confirmation-event');
+const { plannerAppTransporter } = require('../../email/transporter');
+const { recipientMiddleware } = require('../../middleware/recipient');
+const { reminderEventTemplate } = require('../../email/template/planner-app/reminder-event');
 const { SuccessResponseObject, ErrorResponseObject } = require('../../common/http');
+
+// {
+//     "recipient": "jose.morales@hermosasoftware.io",
+//     "clientName": "Jose",
+//     "eventType": "Party",
+//     "startDate": "12-12-12",
+//     "locationName": "CR",
+//     "menuItems": ["Comida", "Bebidas"],
+//     "staff": [{ "name": "j", "lastName": "l" }, { "name": "m", "lastName": "n" }]
+// }
 
 /**
  * @swagger
@@ -59,7 +69,8 @@ const r = Router();
 
 r.post('/', recipientMiddleware, async (req, res) => {
     const { recipient, ...body } = req.body
-    const template = confirmationEventTemplate(body)
+    console.log({body})
+    const template = reminderEventTemplate(body)
     const sendEmailResponse = await plannerAppTransporter.sendMail({
         from: `Un nuevo email recibido desde planner app <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,
         to: recipient,
