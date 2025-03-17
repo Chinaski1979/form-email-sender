@@ -1,9 +1,7 @@
 const _ = require('lodash');
-const multer = require('multer');
 const { CONFIG_ENV } = require('../../config');
 const { Router } = require('express');
 const { anyEmailRejected } = require('../../common/validations');
-const { createFilesObjectFromReq } = require('../../common/filesUtils');
 const { plannerAppTransporter } = require('../../email/transporter');
 const { recipientMiddleware } = require('../../middleware/recipient');
 const { commissionReportTemplate } = require('../../email/template/planner-app/commission-report');
@@ -57,19 +55,21 @@ const { SuccessResponseObject, ErrorResponseObject } = require('../../common/htt
  *               example: 'Internal server error'
  */
 
-const upload = multer();
 const r = Router();
 
-r.post('/', upload.any(), recipientMiddleware, async (req, res) => {
-    const { recipient, ...rest } = req.body
+r.post('/', recipientMiddleware, async (req, res) => {
+    const { recipient, attachments, ...rest } = req.body
     const template = commissionReportTemplate(rest);
-    const filesToSent = createFilesObjectFromReq(req?.files);
     const sendEmailResponse = await plannerAppTransporter.sendMail({
         from: `Un nuevo email recibido desde planner app <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,
         to: recipient,
         subject: `${req?.body.formName}`,
         html: template,
-        attachments: filesToSent
+        attachments: attachments.map(attachment => ({
+            filename: attachment.filename,
+            content: Buffer.from(attachment.content, 'base64'),
+            contentType: attachment.contentType
+        }))
     });
 
     if (!anyEmailRejected(sendEmailResponse)) {
