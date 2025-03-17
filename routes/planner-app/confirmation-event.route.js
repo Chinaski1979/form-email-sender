@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const { CONFIG_ENV } = require('../../config');
 const { Router } = require('express');
-const { recipientMiddleware } = require('./../../middleware/recipient');
+const { toMiddleware } = require('../../middleware/to');
 const { anyEmailRejected } = require('../../common/validations');
 const { plannerAppTransporter } = require('./../../email/transporter');
 const { confirmationEventTemplate } = require('../../email/template/planner-app/confirmation-event');
@@ -87,8 +87,8 @@ const requiredKeys = [
 
 const r = Router();
 
-r.post('/', recipientMiddleware, async (req, res) => {
-    const { recipient, ...body } = req.body
+r.post('/', toMiddleware, async (req, res) => {
+    const { to, ...body } = req.body
 
     requiredKeys.forEach((key) => {
         if (!key in body) {
@@ -101,7 +101,7 @@ r.post('/', recipientMiddleware, async (req, res) => {
     const template = confirmationEventTemplate(body)
     const sendEmailResponse = await plannerAppTransporter.sendMail({
         from: `Un nuevo email recibido desde planner app <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,
-        to: recipient,
+        to: to,
         subject: `${req?.body.formName}`,
         html: template
     });

@@ -3,7 +3,7 @@ const { CONFIG_ENV } = require('../../config');
 const { Router } = require('express');
 const { anyEmailRejected } = require('../../common/validations');
 const { plannerAppTransporter } = require('./../../email/transporter');
-const { recipientMiddleware } = require('./../../middleware/recipient');
+const { toMiddleware } = require('../../middleware/to');
 const { feedbackTemplate } = require('../../email/template/planner-app/feedback');
 const { SuccessResponseObject, ErrorResponseObject } = require('../../common/http');
 
@@ -57,13 +57,13 @@ const { SuccessResponseObject, ErrorResponseObject } = require('../../common/htt
 
 const r = Router();
 
-r.post('/', recipientMiddleware, async (req, res) => {
-    const { recipient } = req.body
+r.post('/', toMiddleware, async (req, res) => {
+    const { to } = req.body
 
     const template = feedbackTemplate()
     const sendEmailResponse = await plannerAppTransporter.sendMail({
         from: `Un nuevo email recibido desde planner app <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,
-        to: recipient,
+        to: to,
         subject: `${req?.body.formName}`,
         html: template
     });
