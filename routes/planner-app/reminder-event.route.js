@@ -73,7 +73,7 @@ r.post('/', toMiddleware, async (req, res) => {
     const sendEmailResponse = await plannerAppTransporter.sendMail({
         from: `Un nuevo email recibido desde planner app <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,
         to: to,
-        subject: `${req?.body.formName}`,
+        subject: "Reminder event",
         html: template
     });
 

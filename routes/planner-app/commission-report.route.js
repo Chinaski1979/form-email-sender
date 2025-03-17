@@ -58,12 +58,12 @@ const { SuccessResponseObject, ErrorResponseObject } = require('../../common/htt
 const r = Router();
 
 r.post('/', toMiddleware, async (req, res) => {
-    const { to, attachments, ...rest } = req.body
+    const { to, attachments, subject, ...rest } = req.body
     const template = commissionReportTemplate(rest);
     const sendEmailResponse = await plannerAppTransporter.sendMail({
         from: `Un nuevo email recibido desde planner app <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,
         to: to,
-        subject: `${req?.body.formName}`,
+        subject: subject,
         html: template,
         attachments: attachments.map(attachment => ({
             filename: attachment.filename,
