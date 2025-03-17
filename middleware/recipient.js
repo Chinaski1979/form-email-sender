@@ -1,3 +1,4 @@
+const { ErrorResponseObject } = require('../common/http');
 const _ = require('lodash');
 
 function recipientMiddleware(req, res, next) {

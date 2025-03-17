@@ -7,6 +7,22 @@ const { plannerAppTransporter } = require('./../../email/transporter');
 const { confirmationEventTemplate } = require('../../email/template/planner-app/confirmation-event');
 const { SuccessResponseObject, ErrorResponseObject } = require('../../common/http');
 
+// {
+//     "recipient": "jose.morales@hermosasoftware.io",
+//     "clientName": "Jose",
+//     "clientEmail": "jose.morales@hermosasoftware.io",
+//     "clientPhone": "84252398",
+//     "startDate": "12-12-12",
+//     "startTime": "12:12:12pm",
+//     "locationName": "CR",
+//     "headcount": {
+//         "toddlers": "algo",
+//         "adults": "15"
+//     },
+//     "menuName": "Comida",
+//     "staff": { "name": "j", "lastName": "l" }
+// }
+
 /**
  * @swagger
  * /planner-app:
@@ -55,10 +71,33 @@ const { SuccessResponseObject, ErrorResponseObject } = require('../../common/htt
  *               example: 'Internal server error'
  */
 
+
+const requiredKeys = [
+    "recipient",
+    "clientName",
+    "clientEmail",
+    "clientPhone",
+    "startDate",
+    "startTime",
+    "locationName",
+    "headcount",,
+    "menuName",
+    "staff"
+]
+
 const r = Router();
 
 r.post('/', recipientMiddleware, async (req, res) => {
     const { recipient, ...body } = req.body
+
+    requiredKeys.forEach((key) => {
+        if (!key in body) {
+            return res
+                .status(400)
+                .json(new ErrorResponseObject(`Field ${key} is requiered`));
+        }
+    })
+
     const template = confirmationEventTemplate(body)
     const sendEmailResponse = await plannerAppTransporter.sendMail({
         from: `Un nuevo email recibido desde planner app <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,

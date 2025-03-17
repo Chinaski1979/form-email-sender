@@ -1,14 +1,14 @@
 const { Router } = require('express');
-const feedbackRoute = require('./feedback.route');
-const reminderEvent = require('./reminder-event.route');
+const feedbackRouteRoute = require('./feedback.route');
+const reminderEventRoute = require('./reminder-event.route');
 const commissionReportRoute = require('./commission-report.route');
 const confirmationEventRoute = require('./confirmation-event.route');
 
 const r = Router();
 
-r.use('/feedback', feedbackRoute);
-r.use('/reminder-event', reminderEvent);
+r.use('/feedback', feedbackRouteRoute);
+r.use('/reminder-event', reminderEventRoute);
 r.use('/commission-report', commissionReportRoute);
-r.use('/confirmation-event', confirmationEventRoute);
+r.use('/confirmation-email', confirmationEventRoute);
 
 module.exports = r;
