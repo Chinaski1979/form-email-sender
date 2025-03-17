@@ -57,13 +57,13 @@ const { SuccessResponseObject, ErrorResponseObject } = require('../../common/htt
 
 const r = Router();
 
-r.post('/', toMiddleware, async (req, res) => {
-    const { to } = req.body
+r.post('/', async (req, res) => {
+    const { clientEmail } = req.body
 
     const template = feedbackTemplate()
     const sendEmailResponse = await plannerAppTransporter.sendMail({
         from: `Un nuevo email recibido desde planner app <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,
-        to: to,
+        to: clientEmail,
         subject: "Feedback",
         html: template
     });
