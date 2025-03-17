@@ -86,7 +86,7 @@ const requiredKeys = [
 
 const r = Router();
 
-r.post('/', toMiddleware, async (req, res) => {
+r.post('/', async (req, res) => {
     const { clientEmail, ...body } = req.body
 
     requiredKeys.forEach((key) => {
