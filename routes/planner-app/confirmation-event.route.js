@@ -87,7 +87,7 @@ const requiredKeys = [
 const r = Router();
 
 r.post('/', async (req, res) => {
-    const { clientEmail, ...body } = req.body
+    const body = req.body
 
     requiredKeys.forEach((key) => {
         if (!key in body) {
@@ -100,7 +100,7 @@ r.post('/', async (req, res) => {
     const template = confirmationEventTemplate(body)
     const sendEmailResponse = await plannerAppTransporter.sendMail({
         from: `Un nuevo email recibido desde planner app <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,
-        to: clientEmail,
+        to: body?.clientEmail,
         subject: "Confirmation Event",
         html: template
     });

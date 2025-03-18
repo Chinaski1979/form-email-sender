@@ -13,7 +13,7 @@ const confirmationEventTemplate = (item) => {
             <li>Location: ${item?.locationName}</li>
             <li>Date: ${item?.startDate}</li>
             <li>Menu Items: ${item?.menuName}</li>
-            <li>Staff: ${item?.staff?.name} ${item?.staff?.lastName}</li>
+            <li>Staff: ${item?.staff}</li>
           </ul>
           <h5>
             <b style="color:teal">Client Information:</b>
