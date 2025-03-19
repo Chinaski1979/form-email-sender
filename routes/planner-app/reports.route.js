@@ -5,6 +5,7 @@ const { anyEmailRejected } = require('../../common/validations');
 const { plannerAppTransporter } = require('../../email/transporter');
 const { toMiddleware } = require('../../middleware/to');
 const { commissionReportTemplate } = require('../../email/template/planner-app/commission-report');
+const { staffPaymentReportTemplate } = require('../../email/template/planner-app/staff-payment-report');
 const { SuccessResponseObject, ErrorResponseObject } = require('../../common/http');
 
 /**
@@ -55,17 +56,47 @@ const { SuccessResponseObject, ErrorResponseObject } = require('../../common/htt
  *               example: 'Internal server error'
  */
 
+const requiredKeys = [
+    "to",
+    "subject",
+    "startDate",
+    "endDate",
+    "templateType",
+    "attachments",
+]
+
+const staffPaymentReport = 'staff-payment-report';
+const commisionReport = 'commision-report';
+
+const validTemplates = [staffPaymentReport, commisionReport]
+
 const r = Router();
 
 r.post('/', toMiddleware, async (req, res) => {
-    const { to, attachments, subject, ...rest } = req.body
-    const template = commissionReportTemplate(rest);
+    const body = req.body
+    requiredKeys.forEach((key) => {
+        if (!(key in req.body)) {
+            return res
+                .status(400)
+                .json(new ErrorResponseObject(`Field ${key} is requiered`));
+        }
+    })
+
+    if (!validTemplates.includes(body.templateType)) {
+        return res
+                .status(400)
+                .json(new ErrorResponseObject(`${body.templateType} is not a valid template`));
+    }
+
+    const template = body.templateType === commisionReport 
+        ? commissionReportTemplate(body) 
+        : staffPaymentReportTemplate(body);
     const sendEmailResponse = await plannerAppTransporter.sendMail({
         from: `Un nuevo email recibido desde planner app <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,
-        to: to,
-        subject: subject,
+        to: body.to,
+        subject: body.subject,
         html: template,
-        attachments: attachments.map(attachment => ({
+        attachments: body.attachments.map(attachment => ({
             filename: attachment.filename,
             content: Buffer.from(attachment.content, 'base64'),
             contentType: attachment.contentType
