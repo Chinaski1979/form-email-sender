@@ -66,9 +66,9 @@ const requiredKeys = [
 ]
 
 const staffPaymentReport = 'staff-payment-report';
-const commisionReport = 'commision-report';
+const commissionReport = 'commission-report';
 
-const validTemplates = [staffPaymentReport, commisionReport]
+const validTemplates = [staffPaymentReport, commissionReport]
 
 const r = Router();
 
@@ -84,12 +84,12 @@ r.post('/', toMiddleware, async (req, res) => {
 
     if (!validTemplates.includes(body.templateType)) {
         return res
-                .status(400)
-                .json(new ErrorResponseObject(`${body.templateType} is not a valid template`));
+            .status(400)
+            .json(new ErrorResponseObject(`${body.templateType} is not a valid template`));
     }
 
-    const template = body.templateType === commisionReport 
-        ? commissionReportTemplate(body) 
+    const template = body.templateType === commissionReport
+        ? commissionReportTemplate(body)
         : staffPaymentReportTemplate(body);
     const sendEmailResponse = await plannerAppTransporter.sendMail({
         from: `Un nuevo email recibido desde planner app <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,
