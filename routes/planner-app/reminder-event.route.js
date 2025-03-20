@@ -67,7 +67,6 @@ const { SuccessResponseObject, ErrorResponseObject } = require('../../common/htt
 
 const requiredKeys = [
     "clientName",
-    "eventType",
     "startDate",
     "locationName",
     "menuItems",

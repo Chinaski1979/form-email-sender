@@ -10,7 +10,7 @@ const reminderEventTemplate = (item) => {
           </h2>
           <p style="color:rgb(20, 20, 20; margin: 5px 0 0 0;">
            This email is to remind you of your
-            <b style="color: teal;">${item.eventType || ''}</b> 
+            <b style="color: teal;">${item?.eventType || ''}</b> 
             at: <b style="color: teal;">${item.startDate || ''}</b> 
            at
             <b style="color: teal;">${item.locationName || ''}</b>
