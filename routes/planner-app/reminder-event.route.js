@@ -65,14 +65,31 @@ const { SuccessResponseObject, ErrorResponseObject } = require('../../common/htt
  *               example: 'Internal server error'
  */
 
+const requiredKeys = [
+    "clientName",
+    "eventType",
+    "startDate",
+    "locationName",
+    "menuItems",
+    "staff",
+];
+
 const r = Router();
 
-r.post('/', toMiddleware, async (req, res) => {
-    const { to, ...body } = req.body;
-    const template = reminderEventTemplate(body)
+r.post('/', async (req, res) => {
+    const body = req.body;
+    requiredKeys.forEach((key) => {
+        if (!(key in body)) {
+            return res
+                .status(400)
+                .json(new ErrorResponseObject(`Field ${key} is requiered`));
+        }
+    })
+
+    const template = reminderEventTemplate(body);
     const sendEmailResponse = await plannerAppTransporter.sendMail({
         from: `Un nuevo email recibido desde planner app <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,
-        to: to,
+        to: body?.clientEmail,
         subject: "Reminder event",
         html: template
     });
