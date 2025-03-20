@@ -69,8 +69,8 @@ const requiredKeys = [
     "clientName",
     "startDate",
     "locationName",
-    "menuItems",
-    "staff",
+    "menuItemNames",
+    "staffNames",
 ];
 
 const r = Router();

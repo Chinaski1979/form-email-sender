@@ -94,7 +94,7 @@ const reminderEventTemplate = (item) => {
                   text-align: right;
                 "
               >
-                ${(item.menuItems.toString() || [])}
+                ${(item.menuItemNames.toString() || [])}
               </td>
             </tr>
     
@@ -116,10 +116,7 @@ const reminderEventTemplate = (item) => {
                   text-align: right;
                 "
               >
-                ${(item?.staff || [])
-                    .map((i) => `${i.name || ''} ${i.lastName || ''}`)
-                    .join(', ') || 'N/A'
-                }
+                ${item?.staffNames.toString()}
               </td>
             </tr>
           </table>
