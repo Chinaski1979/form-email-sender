@@ -7,7 +7,7 @@ const { SuccessResponseObject, ErrorResponseObject } = require('../common/http')
 
 const r = Router();
 
-const gastroParkTransporter = createTransporter({
+const mavAppTransporter = createTransporter({
     service: "Gmail",
     host: "smtp.gmail.com",
     port: 465,
@@ -42,7 +42,7 @@ r.post('/', async (req, res) => {
 
     const { to, template, subject, from } = body;
     
-    const sendEmailResponse = await gastroParkTransporter.sendMail({
+    const sendEmailResponse = await mavAppTransporter.sendMail({
         from: from,
         to: to,
         subject: subject,
