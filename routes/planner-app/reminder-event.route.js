@@ -3,19 +3,8 @@ const { CONFIG_ENV } = require('../../config');
 const { Router } = require('express');
 const { anyEmailRejected } = require('../../common/validations');
 const { plannerAppTransporter } = require('../../email/transporter');
-const { toMiddleware } = require('../../middleware/to');
 const { reminderEventTemplate } = require('../../email/template/planner-app/reminder-event');
 const { SuccessResponseObject, ErrorResponseObject } = require('../../common/http');
-
-// {
-//     "recipient": "jose.morales@hermosasoftware.io",
-//     "clientName": "Jose",
-//     "eventType": "Party",
-//     "startDate": "12-12-12",
-//     "locationName": "CR",
-//     "menuItems": ["Comida", "Bebidas"],
-//     "staff": [{ "name": "j", "lastName": "l" }, { "name": "m", "lastName": "n" }]
-// }
 
 /**
  * @swagger
