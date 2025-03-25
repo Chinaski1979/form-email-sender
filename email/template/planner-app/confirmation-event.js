@@ -2,7 +2,7 @@
 const confirmationEventTemplate = (item) => {
   return (
     `<h3 style='color:black'>
-            Hi Dear ${item?.clientName} !!!
+            Hi ${item?.clientName}
             </h3>
         <p  style='color:black'>Your event has been confirmed for: ${item?.startDate} at ${item?.startTime} , in the location: <b style="color:teal">${item?.locationName}</b></p>
           <h5>
