@@ -21,7 +21,7 @@ const confirmationEventToManagerTemplate = (item) => {
             </h5>
             <ul style='color:black'>
               <li>Client Name: ${item?.clientName}</li>
-              <li> Client Email: ${item?.clientEmail} </li>
+              <li> Client Email: ${item?.managerEmail} </li>
               <li>Client Phone: ${item?.clientPhone} </li>
             </ul>
         `

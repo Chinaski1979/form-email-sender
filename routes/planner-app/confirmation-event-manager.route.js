@@ -77,7 +77,7 @@ const requiredKeys = [
     "startDate",
     "headcount",
     "clientName",
-    "clientEmail",
+    "managerEmail",
     "clientPhone",
     "companyName",
     "managerName",
@@ -100,7 +100,7 @@ r.post('/', async (req, res) => {
     const template = confirmationEventToManagerTemplate(body)
     const sendEmailResponse = await plannerAppTransporter.sendMail({
         from: `Un nuevo email recibido desde planner app <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,
-        to: body?.clientEmail,
+        to: body?.managerEmail,
         subject: "Confirmation Event",
         html: template
     });
