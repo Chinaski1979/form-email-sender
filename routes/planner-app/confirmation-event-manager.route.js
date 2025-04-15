@@ -78,6 +78,7 @@ const requiredKeys = [
     "headcount",
     "clientName",
     "managerEmail",
+    "clientEmail",
     "clientPhone",
     "companyName",
     "managerName",
