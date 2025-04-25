@@ -99,7 +99,7 @@ r.post('/', async (req, res) => {
 
     const template = confirmationEventTemplate(body)
     const sendEmailResponse = await plannerAppTransporter.sendMail({
-        from: `Un nuevo email recibido desde planner app <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,
+        from: `Email for Event Confirmation.  <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,
         to: body?.clientEmail,
         subject: "Confirmation Event",
         html: template

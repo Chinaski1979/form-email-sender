@@ -6,7 +6,7 @@ const confirmationEventTemplate = (item) => {
         Hi ${item?.clientName}
       </h3>
       <p  style='color:black'>
-        Your event has been confirmed for: ${item?.startDate} at ${item?.startTime}, in the location: <b style="color:teal">${item?.locationName}</b>
+        Your event has been confirmed for: ${item?.startDate}, in the location: <b style="color:teal">${item?.locationName}</b>
       </p>
       <h5>
         <b style="color:teal">Service Information:</b>
