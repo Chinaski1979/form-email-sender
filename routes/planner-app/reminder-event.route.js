@@ -60,6 +60,8 @@ const requiredKeys = [
     "locationName",
     "menuItemNames",
     "staffNames",
+    "grandTotal",
+    "allergies"
 ];
 
 const r = Router();
@@ -76,7 +78,7 @@ r.post('/', async (req, res) => {
 
     const template = reminderEventTemplate(body);
     const sendEmailResponse = await plannerAppTransporter.sendMail({
-        from: `Un nuevo email recibido desde planner app <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,
+        from: `Email for Reminder Event. <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,
         to: body?.clientEmail,
         subject: "Reminder event",
         html: template
