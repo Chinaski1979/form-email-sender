@@ -1,7 +1,6 @@
 const _ = require('lodash');
 const { CONFIG_ENV } = require('../../config');
 const { Router } = require('express');
-const { toMiddleware } = require('../../middleware/to');
 const { anyEmailRejected } = require('../../common/validations');
 const { plannerAppTransporter } = require('./../../email/transporter');
 const { confirmationEventToManagerTemplate } = require('../../email/template/planner-app/confirmation-event-manager');
@@ -72,7 +71,6 @@ const { SuccessResponseObject, ErrorResponseObject } = require('../../common/htt
  */
 
 const requiredKeys = [
-    "staff",
     "menuName",
     "startDate",
     "headcount",
@@ -82,7 +80,8 @@ const requiredKeys = [
     "clientPhone",
     "companyName",
     "managerName",
-    "locationName"
+    "locationName",
+    "eventTypeName"
 ];
 
 const r = Router();

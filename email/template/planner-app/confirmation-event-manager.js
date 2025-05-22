@@ -10,11 +10,11 @@ const confirmationEventToManagerTemplate = (item) => {
               <b style="color:teal">Service Information:</b>
             </h5>
             <ul style='color:black'>
+              <li>Event Type: ${item?.eventTypeName}</li>
               <li>PAX#: ${item?.headcount?.toddlers + item?.headcount?.adults}</li>
               <li>Location: ${item?.locationName}</li>
               <li>Date: ${item?.startDate}</li>
               <li>Menu Items: ${item?.menuName}</li>
-              <li>Staff: ${item?.staff}</li>
             </ul>
             <h5>
               <b style="color:teal">Client Information:</b>
@@ -23,6 +23,14 @@ const confirmationEventToManagerTemplate = (item) => {
               <li>Client Name: ${item?.clientName}</li>
               <li> Client Email: ${item?.clientEmail} </li>
               <li>Client Phone: ${item?.clientPhone} </li>
+            </ul>
+            <h5>
+              <b style="color:teal">Financial Information:</b>
+            </h5>
+            <ul style='color:black'>
+              <li>Service Charge: $${item?.serviceCharge?.toFixed(2)}</li>
+              <li>Additional Charges: $${item?.additionalCharges?.toFixed(2)}</li>
+              <li><b>Total Amount: $${item?.grandTotal?.toFixed(2)}</b></li>
             </ul>
         `
     );
