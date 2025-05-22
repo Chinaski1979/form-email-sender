@@ -79,9 +79,9 @@ const requiredKeys = [
     "startDate",
     "startTime",
     "locationName",
-    "headcount",,
+    "headcount",
     "menuName",
-    "staff"
+    "eventTypeName"
 ]
 
 const r = Router();
