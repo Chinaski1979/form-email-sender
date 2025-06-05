@@ -1,5 +1,5 @@
 const feedbackTemplate = () => {
-    const GOOGLE_FORM_URL = "https://forms.gle/LFB5UdoqVo6SeqCr9";
+    const GOOGLE_FORM_URL = "https://forms.gle/U5xzr7153JY6Cs1V9";
     const GOOGLE_REVIEWS_URL = "https://acortar.link/pr2981";
     
     return `
