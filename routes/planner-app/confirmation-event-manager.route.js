@@ -1,26 +1,11 @@
 const _ = require('lodash');
 const { CONFIG_ENV } = require('../../config');
 const { Router } = require('express');
+const { toMiddleware } = require('../../middleware/to');
 const { anyEmailRejected } = require('../../common/validations');
 const { plannerAppTransporter } = require('./../../email/transporter');
 const { confirmationEventToManagerTemplate } = require('../../email/template/planner-app/confirmation-event-manager');
 const { SuccessResponseObject, ErrorResponseObject } = require('../../common/http');
-
-// {
-//     "recipient": "jose.morales@hermosasoftware.io",
-//     "clientName": "Jose",
-//     "clientEmail": "jose.morales@hermosasoftware.io",
-//     "clientPhone": "84252398",
-//     "startDate": "12-12-12",
-//     "startTime": "12:12:12pm",
-//     "locationName": "CR",
-//     "headcount": {
-//         "toddlers": "algo",
-//         "adults": "15"
-//     },
-//     "menuName": "Comida",
-//     "staff": { "name": "j", "lastName": "l" }
-// }
 
 /**
  * @swagger
@@ -81,37 +66,50 @@ const requiredKeys = [
     "companyName",
     "managerName",
     "locationName",
-    "eventTypeName"
+    "eventTypeName",
+    "serviceCharge",
+    "additionalCharges",
+    "grandTotal"
 ];
 
 const r = Router();
 
 r.post('/', async (req, res) => {
-    const body = req.body
+    const body = req.body;
 
-    requiredKeys.forEach((key) => {
-        if (!key in body) {
-            return res
-                .status(400)
-                .json(new ErrorResponseObject(`Field ${key} is requiered`));
-        }
-    })
+    // Validate required fields only if it's not a parent event
+    if (!body.isParentEvent) {
+        requiredKeys.forEach((key) => {
+            if (!key in body) {
+                return res
+                    .status(400)
+                    .json(new ErrorResponseObject(`Field ${key} is required`));
+            }
+        });
+    }
 
-    const template = confirmationEventToManagerTemplate(body)
+    // If it's a parent event, validate that it has children events
+    if (body.isParentEvent && (!body.childrenEvents || !Array.isArray(body.childrenEvents) || body.childrenEvents.length === 0)) {
+        return res
+            .status(400)
+            .json(new ErrorResponseObject('Children events are required for parent events'));
+    }
+
+    const template = confirmationEventToManagerTemplate(body);
     const sendEmailResponse = await plannerAppTransporter.sendMail({
         from: `Un nuevo email recibido desde planner app <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,
         to: body?.managerEmail,
-        subject: "Confirmation Event",
+        subject: body.isParentEvent ? "Multiple Events Confirmation" : "Event Confirmation",
         html: template
     });
 
     if (!anyEmailRejected(sendEmailResponse)) {
         return res
             .status(400)
-            .json(new ErrorResponseObject(`These emails were rejected ${sendEmailResponse?.rejected?.toString()}`))
+            .json(new ErrorResponseObject(`These emails were rejected ${sendEmailResponse?.rejected?.toString()}`));
     }
 
-    return res.status(200).json(new SuccessResponseObject('Email send'))
+    return res.status(200).json(new SuccessResponseObject('Email sent'));
 });
 
-module.exports = r;
+module.exports = r; 
