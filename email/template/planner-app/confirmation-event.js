@@ -25,7 +25,7 @@ const confirmationEventTemplate = (item) => {
       <li>Client Phone: ${item?.clientPhone}</li>
     </ul>
     <h5>
-      <b style="color:teal">Financial Information:</b>
+      <b style="color:teal">Price Breakdown:</b>
     </h5>
     <ul style='color:black'>
       <li>Service Charge: $${item?.serviceCharge?.toFixed(2)}</li>
@@ -37,17 +37,13 @@ const confirmationEventTemplate = (item) => {
   // if is parent event and has children events, add the children events to the template
   if (item?.isParentEvent && item?.childrenEvents?.length > 0) {
     const childrenEventsTemplate = item.childrenEvents.map((childEvent, index) => `
-      <div style="margin-top: 20px; padding: 10px; border: 1px solid teal; border-radius: 5px;">
-        <h4 style="color:teal">Related Event #${index + 1}</h4>
-        <ul style='color:black'>
-          <li>Event Type: ${childEvent?.eventType}</li>
-          <li>PAX#: ${childEvent?.headcount?.toddlers + childEvent?.headcount?.adults}</li>
-          <li>Location: ${childEvent?.location}</li>
-          <li>Date: ${childEvent?.startDate}</li>
-          <li>Menu Items: ${childEvent?.menuItems}</li>
-          <li>Staff: ${childEvent?.staff}</li>
-        </ul>
-      </div>
+      <p style="margin-top: 15px; color:black">
+        <b>Event #${index + 1}:</b><br>
+        Date: ${childEvent?.startDate}<br>
+        Event Type: ${childEvent?.eventType}<br>
+        Menu Items: ${childEvent?.menuItems}<br>
+        Staff: ${childEvent?.staff}
+      </p>
     `).join('');
 
     return mainEventTemplate + `
