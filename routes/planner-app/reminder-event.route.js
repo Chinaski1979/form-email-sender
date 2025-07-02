@@ -78,19 +78,11 @@ r.post('/', async (req, res) => {
 
     const template = reminderEventTemplate(body);
 
-    const staffAttachments = body.staffNames.map((staff, index) => ({
-        filename: `staff-${index}.jpg`,
-        content: staff.profilePic.split('base64,')[1], // Extrae solo la parte base64
-        encoding: 'base64',
-        cid: `staff-${index}` // ID único para cada imagen
-    }));
-
     const sendEmailResponse = await plannerAppTransporter.sendMail({
         from: `Email for Reminder Event. <${CONFIG_ENV.PLANNER_APP_SENDER_EMAIL}>`,
         to: body?.clientEmail,
         subject: "Reminder event",
-        html: template,
-        attachments: staffAttachments // Añade los attachments aquí
+        html: template
     });
 
     if (!anyEmailRejected(sendEmailResponse)) {
