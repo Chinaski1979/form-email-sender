@@ -8,9 +8,8 @@ const reminderEventTemplate = (item) => {
 
     staffHTML += `
     <td style="text-align: center; padding: 10px;">
-      <img src="cid:staff-${index}"
-           alt="${staff.name} ${staff.lastName}"
-           style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto;"/>
+      <img src="${staff.profilePic}" alt="${staff.name} ${staff.lastName}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto;"/>
+      
       <p style="margin: 8px 0 0 0; font-size: 14px; color: rgb(20, 20, 20);">
         ${staff.name} ${staff.lastName}
       </p>
