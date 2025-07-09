@@ -37,7 +37,7 @@ const confirmationEventToManagerTemplate = (item) => {
   if (item?.isParentEvent && item?.childrenEvents?.length > 0) {
     const childrenEventsTemplate = item.childrenEvents.map((childEvent, index) => `
       <p style="margin-top: 15px; color:black">
-        <b>Event #${index + 1}:</b><br>
+        <b>Event #${index + 2}:</b><br>
         Date: ${childEvent?.startDate}<br>
         Event Type: ${childEvent?.eventType}<br>
         Menu Items: ${childEvent?.menuItems}<br>
