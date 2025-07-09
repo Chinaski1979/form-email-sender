@@ -1,5 +1,5 @@
 const propellaCommonTemplate = (fields) => {
-  const list = fields
+  const list = Object.entries(fields)
     .map(([key, value]) => {
       return (
         `<li> 

@@ -9,6 +9,8 @@ const { propellaCommonTemplate } = require('../email/template/propella');
 const { SuccessResponseObject, ErrorResponseObject } = require('../common/http');
 const { webFlowMiddleware } = require('../middleware/webflow');
 
+const PROPELLA_PROD_ORIGIN = 'https://www.propella.cr';
+
 const upload = multer();
 const r = Router();
 
@@ -29,12 +31,13 @@ r.post('/', upload.any(), webFlowMiddleware, async (req, res) => {
       .status(404)
       .json(new ErrorResponseObject('The body or files are required'))
   }
+  const originName = req.get('origin')
 
   const filesToSent = createFilesObjectFromReq(req?.files);
   const template = propellaCommonTemplate(req?.body.fields)
   const sendEmailResponse = await propellaTransporter.sendMail({
     from: `Un nuevo formulario desde Webflow <${CONFIG_ENV.PROPELLA_SENDER_EMAIL}>`,
-    to: env.PROPELLA_TO_EMAIL,
+    to: originName === PROPELLA_PROD_ORIGIN ? env.PROPELLA_TO_EMAIL : 'jose.morales@hermosasoftware.io',
     subject: `Nombre del formulario ${req?.body.formName}`,
     html: template,
     attachments: filesToSent
