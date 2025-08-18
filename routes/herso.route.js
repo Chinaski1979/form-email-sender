@@ -27,6 +27,9 @@ r.post('/', async (req, res) => {
       .status(404)
       .json(new ErrorResponseObject('The fields are required'))
   }
+
+  console.log({HERSO_SENDER_PASSWORD: CONFIG_ENV.HERSO_SENDER_PASSWORD, HERSO_SENDER_PASSWORD: CONFIG_ENV.HERSO_SENDER_PASSWORD,})
+
   const originName = req.get('origin')
   const template = hersoCommonTemplate(req?.body)
   const sendEmailResponse = await hersoTransporter.sendMail({
