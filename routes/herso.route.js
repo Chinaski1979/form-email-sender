@@ -6,6 +6,7 @@ const { createTransporter } = require('../email/transporter');
 const { hersoCommonTemplate } = require('../email/template/herso');
 const { SuccessResponseObject, ErrorResponseObject } = require('../common/http');
 
+const HERSO_PROD_ORIGIN = 'https://hermosasoftware.io/';
 const r = Router();
 
 const hersoTransporter = createTransporter({
@@ -25,11 +26,12 @@ r.post('/', async (req, res) => {
       .status(404)
       .json(new ErrorResponseObject('The fields are required'))
   }
-
+  
+  const originName = req.get('origin')
   const template = hersoCommonTemplate(req?.body)
   const sendEmailResponse = await hersoTransporter.sendMail({
     from: `Un nuevo formulario desde la página de herso <${CONFIG_ENV.HERSO_SENDER_EMAIL}>`,
-    to: env.HERSO_TO_EMAIL,
+    to: originName === HERSO_PROD_ORIGIN ? CONFIG_ENV.HERSO_TO_EMAIL : 'jose.morales@hermosasoftware.io',
     subject: `Contacto HERSO page`,
     html: template
   });
