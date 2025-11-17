@@ -3,20 +3,21 @@ const { CONFIG_ENV } = require('../config');
 const { Router } = require('express');
 const { requestIsEmpty, anyEmailRejected } = require('../common/validations');
 const { createTransporter } = require('../email/transporter');
-const { mobulaCommonTemplate } = require('../email/template/mobula');
+const { tabstrCommonTemplate } = require('../email/template/tabstr');
 const { SuccessResponseObject, ErrorResponseObject } = require('../common/http');
 
-const MOBULA_PROD_ORIGIN = 'https://mobulaestudio.com';
+const TABSTR_PROD_ORIGIN = 'https://www.tabstr.net/';
+
 const r = Router();
 
-const mobulaTransporter = createTransporter({
+const propellaTransporter = createTransporter({
   service: "Gmail",
   host: "smtp.gmail.com",
   port: 465,
   secure: true,
   auth: {
-    user: CONFIG_ENV.MOBULA_SENDER_EMAIL,
-    pass: CONFIG_ENV.MOBULA_SENDER_PASSWORD,
+    user: CONFIG_ENV.TABSTR_SENDER_EMAIL,
+    pass: CONFIG_ENV.TABSTR_SENDER_PASSWORD,
   },
 })
 
@@ -26,13 +27,12 @@ r.post('/', async (req, res) => {
       .status(404)
       .json(new ErrorResponseObject('The body or files are required'))
   }
-
-  const template = mobulaCommonTemplate(req?.body)
   const originName = req.get('origin')
-  const sendEmailResponse = await mobulaTransporter.sendMail({
-    from: `Un nuevo Email para mobula <${CONFIG_ENV.MOBULA_SENDER_EMAIL}>`,
-    to: originName === MOBULA_PROD_ORIGIN ? env.MOBULA_TO_EMAIL : 'jose.morales@hermosasoftware.io',
-    subject: 'Nuevo Email para mobula',
+  const template = tabstrCommonTemplate(req?.body)
+  const sendEmailResponse = await propellaTransporter.sendMail({
+    from: `Un nuevo formulario desde tabstr <${CONFIG_ENV.TABSTR_TO_EMAIL}>`,
+    to: originName === TABSTR_PROD_ORIGIN ? env.PROPELLA_TO_EMAIL : 'jose.morales@hermosasoftware.io',
+    subject: 'Nuevo formulario de contacto recibido',
     html: template
   });
 
