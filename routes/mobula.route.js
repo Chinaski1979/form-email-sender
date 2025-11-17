@@ -9,6 +9,8 @@ const { mobulaCommonTemplate } = require('../email/template/mobula');
 const { SuccessResponseObject, ErrorResponseObject } = require('../common/http');
 const { framerMiddleware } = require('../middleware/framer');
 
+const MOBULA_PROD_ORIGIN = 'https://mobulaestudio.com';
+
 const upload = multer();
 const r = Router();
 
@@ -32,9 +34,10 @@ r.post('/', upload.any(), framerMiddleware, async (req, res) => {
 
   const filesToSent = createFilesObjectFromReq(req?.files);
   const template = mobulaCommonTemplate(req?.body.fields)
+  const originName = req.get('origin')
   const sendEmailResponse = await mobulaTransporter.sendMail({
     from: `Un nuevo formulario desde Mobula Framer <${CONFIG_ENV.MOBULA_SENDER_EMAIL}>`,
-    to: CONFIG_ENV.MOBULA_TO_EMAIL,
+    to: originName === PROPELLA_PROD_ORIGIN ? env.MOBULA_TO_EMAIL : 'jose.morales@hermosasoftware.io',
     subject: `Nombre del formulario ${req?.body.formName}`,
     html: template,
     attachments: filesToSent
