@@ -33,8 +33,7 @@ r.post('/', async (req, res) => {
     from: `Un nuevo Email para mobula <${CONFIG_ENV.MOBULA_SENDER_EMAIL}>`,
     to: originName === MOBULA_PROD_ORIGIN ? env.MOBULA_TO_EMAIL : 'jose.morales@hermosasoftware.io',
     subject: 'Nuevo Email para mobula',
-    html: template,
-    attachments: filesToSent
+    html: template
   });
 
   if (!anyEmailRejected(sendEmailResponse)) {
