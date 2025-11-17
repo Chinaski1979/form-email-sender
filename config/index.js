@@ -17,6 +17,9 @@ const CONFIG_ENV = {
   HERSO_SENDER_EMAIL: process.env.HERSO_SENDER_EMAIL?.trim(),
   HERSO_SENDER_PASSWORD: process.env.HERSO_SENDER_PASSWORD?.trim(),
   HERSO_TO_EMAIL: process.env.HERSO_TO_EMAIL?.trim(),
+  TABSTR_SENDER_EMAIL: process.env.TABSTR_SENDER_EMAIL?.trim(),
+  TABSTR_SENDER_PASSWORD: process.env.TABSTR_SENDER_PASSWORD?.trim(),
+  TABSTR_TO_EMAIL: process.env.TABSTR_TO_EMAIL?.trim()
 };
 
 module.exports = { CONFIG_ENV };

@@ -16,8 +16,8 @@ const propellaTransporter = createTransporter({
   port: 465,
   secure: true,
   auth: {
-    user: CONFIG_ENV.PROPELLA_SENDER_EMAIL,
-    pass: CONFIG_ENV.PROPELLA_SENDER_PASSWORD,
+    user: CONFIG_ENV.TABSTR_SENDER_EMAIL,
+    pass: CONFIG_ENV.TABSTR_SENDER_PASSWORD,
   },
 })
 
@@ -30,7 +30,7 @@ r.post('/', async (req, res) => {
   const originName = req.get('origin')
   const template = tabstrCommonTemplate(req?.body)
   const sendEmailResponse = await propellaTransporter.sendMail({
-    from: `Un nuevo formulario desde tabstr <${CONFIG_ENV.PROPELLA_SENDER_EMAIL}>`,
+    from: `Un nuevo formulario desde tabstr <${CONFIG_ENV.TABSTR_TO_EMAIL}>`,
     to: originName === TABSTR_PROD_ORIGIN ? env.PROPELLA_TO_EMAIL : 'jose.morales@hermosasoftware.io',
     subject: 'Nuevo formulario de contacto recibido',
     html: template
