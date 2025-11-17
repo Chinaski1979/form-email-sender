@@ -6,7 +6,7 @@ const { createTransporter } = require('../email/transporter');
 const { tabstrCommonTemplate } = require('../email/template/tabstr');
 const { SuccessResponseObject, ErrorResponseObject } = require('../common/http');
 
-const TABSTR_PROD_ORIGIN = 'https://www.propella.cr';
+const TABSTR_PROD_ORIGIN = 'https://www.tabstr.net/';
 
 const r = Router();
 
