@@ -1,17 +1,12 @@
 const _ = require('lodash');
-const multer = require('multer');
 const { CONFIG_ENV } = require('../config');
 const { Router } = require('express');
 const { requestIsEmpty, anyEmailRejected } = require('../common/validations');
 const { createTransporter } = require('../email/transporter');
-const { createFilesObjectFromReq } = require('../common/filesUtils');
 const { mobulaCommonTemplate } = require('../email/template/mobula');
 const { SuccessResponseObject, ErrorResponseObject } = require('../common/http');
-const { framerMiddleware } = require('../middleware/framer');
 
 const MOBULA_PROD_ORIGIN = 'https://mobulaestudio.com';
-
-const upload = multer();
 const r = Router();
 
 const mobulaTransporter = createTransporter({
@@ -25,20 +20,19 @@ const mobulaTransporter = createTransporter({
   },
 })
 
-r.post('/', upload.any(), framerMiddleware, async (req, res) => {
+r.post('/', async (req, res) => {
   if (requestIsEmpty(req)) {
     return res
       .status(404)
       .json(new ErrorResponseObject('The body or files are required'))
   }
 
-  const filesToSent = createFilesObjectFromReq(req?.files);
-  const template = mobulaCommonTemplate(req?.body.fields)
+  const template = mobulaCommonTemplate(req?.body)
   const originName = req.get('origin')
   const sendEmailResponse = await mobulaTransporter.sendMail({
-    from: `Un nuevo formulario desde Mobula Framer <${CONFIG_ENV.MOBULA_SENDER_EMAIL}>`,
-    to: originName === PROPELLA_PROD_ORIGIN ? env.MOBULA_TO_EMAIL : 'jose.morales@hermosasoftware.io',
-    subject: `Nombre del formulario ${req?.body.formName}`,
+    from: `Un nuevo Email para mobula <${CONFIG_ENV.MOBULA_SENDER_EMAIL}>`,
+    to: originName === MOBULA_PROD_ORIGIN ? env.MOBULA_TO_EMAIL : 'jose.morales@hermosasoftware.io',
+    subject: 'Nuevo Email para mobula',
     html: template,
     attachments: filesToSent
   });
