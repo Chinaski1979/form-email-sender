@@ -39,6 +39,8 @@ const sharedJsonSender = async ({
 
     const originName = req.get('origin');
 
+    console.log('origin', originName);
+
     const template = fnTemplate(req?.body)
 
     const sendEmailResponse = await transporter.sendMail({
@@ -54,7 +56,10 @@ const sharedJsonSender = async ({
         .json(new ErrorResponseObject(`These emails were rejected ${sendEmailResponse?.rejected?.toString()}`));
     }
 
-    return res.status(200).json(new SuccessResponseObject('Email send'));
+    return res.status(200).json(new SuccessResponseObject({
+      origin: originName,
+      message: "SUCCESS"
+    }));
   } catch(e) {
     throw new Error(e);
   }
