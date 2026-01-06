@@ -1,3 +1,4 @@
+const e = require('express');
 const { SuccessResponseObject, ErrorResponseObject } = require('../common/http');
 const { requestIsEmpty, anyEmailRejected } = require('../common/validations');
 const { createTransporter } = require('../email/transporter');
@@ -38,14 +39,17 @@ const sharedJsonSender = async ({
     if (!transporter) return res.status(401).json(new ErrorResponseObject('Error on create transporter'));
 
     const originName = req.get('origin');
+    const appEnv = req.get("X-App-Env");
 
     console.log('origin', originName);
 
     const template = fnTemplate(req?.body)
 
+    const isProd = (originName === PROD_URL || appEnv === 'production');
+
     const sendEmailResponse = await transporter.sendMail({
       from: `${fromText} <${SENDER_EMAIL}>`,
-      to: originName === PROD_URL ? TO_EMAIL : 'jose.morales@hermosasoftware.io',
+      to: isProd ? TO_EMAIL : 'jose.morales@hermosasoftware.io',
       subject: subject,
       html: template
     });
@@ -58,6 +62,7 @@ const sharedJsonSender = async ({
 
     return res.status(200).json(new SuccessResponseObject({
       origin: originName,
+      env: appEnv,
       message: "SUCCESS"
     }));
   } catch(e) {
