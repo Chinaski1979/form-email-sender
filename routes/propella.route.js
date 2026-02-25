@@ -24,7 +24,7 @@ r.post('/', async (req, res) => {
   } catch (e) {
     console.error('Error on prepare the email', e);
     return res
-      .status(401)
+      .status(403)
       .json(new ErrorResponseObject('Error on prepare the email'));
   }
 });
