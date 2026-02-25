@@ -17,13 +17,13 @@ const sharedJsonSender = async ({
   try {
     if (requestIsEmpty(req)) {
       return res
-        .status(401)
+        .status(403)
         .json(new ErrorResponseObject('The body or files are required'))
     }
 
-    if (!TO_EMAIL) return res.status(401).json(new ErrorResponseObject('TO_EMAIL is Requiered'));
-    if (!SENDER_EMAIL) return res.status(401).json(new ErrorResponseObject('SENDER_EMAIL is Requiered'));
-    if (!SENDER_PASSWORD) return res.status(401).json(new ErrorResponseObject('SENDER_PASSWORD is Requiered'));
+    if (!TO_EMAIL) return res.status(403).json(new ErrorResponseObject('TO_EMAIL is Requiered'));
+    if (!SENDER_EMAIL) return res.status(403).json(new ErrorResponseObject('SENDER_EMAIL is Requiered'));
+    if (!SENDER_PASSWORD) return res.status(403).json(new ErrorResponseObject('SENDER_PASSWORD is Requiered'));
 
     const transporter = createTransporter({
       service: "Gmail",
@@ -36,7 +36,7 @@ const sharedJsonSender = async ({
       },
     })
 
-    if (!transporter) return res.status(401).json(new ErrorResponseObject('Error on create transporter'));
+    if (!transporter) return res.status(403).json(new ErrorResponseObject('Error on create transporter'));
 
     const originName = req.get('origin');
     const appEnv = req.get("X-App-Env");
@@ -56,7 +56,7 @@ const sharedJsonSender = async ({
 
     if (!anyEmailRejected(sendEmailResponse)) {
       return res
-        .status(401)
+        .status(403)
         .json(new ErrorResponseObject(`These emails were rejected ${sendEmailResponse?.rejected?.toString()}`));
     }
 
