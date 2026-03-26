@@ -29,4 +29,26 @@ r.post('/', async (req, res) => {
   }
 });
 
+r.post('/program-inquiries', async (req, res) => {
+  try {
+    await sharedJsonSender({
+      req: req,
+      res: res,
+      subject: 'Nuevo formulario de programa recibido',
+      fromText: 'Un nuevo formulario de programas desde Propella Website',
+      PROD_URL: PROD_ORIGIN,
+      fnTemplate: propellaCommonTemplate,
+      TO_EMAIL: CONFIG_ENV.PROPELLA_SPECIAL_FORMS_TO_EMAIL,
+      SENDER_EMAIL: CONFIG_ENV.PROPELLA_SENDER_EMAIL,
+      SENDER_PASSWORD: CONFIG_ENV.PROPELLA_SENDER_PASSWORD,
+      alwaysUseToEmail: true,
+    })
+  } catch (e) {
+    console.error('Error on prepare the email', e);
+    return res
+      .status(403)
+      .json(new ErrorResponseObject('Error on prepare the email'));
+  }
+});
+
 module.exports = r;
