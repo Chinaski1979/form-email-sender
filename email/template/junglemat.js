@@ -41,25 +41,25 @@ const junglematCommonTemplate = (fields) => {
           <table class="container" width="600" cellspacing="0" cellpadding="0" style="background: #ffffff; border-radius: 12px; overflow: hidden;">
             <!-- Header with Logo -->
             <tr>
-              <td style="background-color: #000000; padding: 30px; text-align: center;">
+              <td style="background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); padding: 36px 30px; text-align: center; border-bottom: 2px solid #e91e63;">
                 <a href="https://junglemat.com" target="_blank" style="text-decoration: none;">
-                  <img src="${logoDataUri}" alt="JungleMat" width="200" style="display: block; max-width: 100%; height: auto; border: 0;">
+                  <img src="${logoDataUri}" alt="JungleMat" width="200" style="display: block; max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
                 </a>
               </td>
             </tr>
 
             <!-- Title -->
             <tr>
-              <td style="padding: 30px 40px 10px 40px;">
-                <h1 style="margin: 0; color: #333333; font-size: 24px;">Nuevo formulario recibido</h1>
-                <p style="margin: 8px 0 0 0; color: #666666; font-size: 14px;">Formulario de contacto desde junglemat.com</p>
+              <td style="padding: 36px 40px 10px 40px;">
+                <h1 style="margin: 0; color: #2c3e50; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">Nuevo formulario recibido</h1>
+                <p style="margin: 10px 0 0 0; color: #7f8c8d; font-size: 15px; font-weight: 500;">Formulario de contacto desde <strong style="color: #e91e63;">junglemat.com</strong></p>
               </td>
             </tr>
 
             <!-- Field Grid -->
             <tr>
-              <td style="padding: 0 40px 40px 40px;">
-                <table width="100%" cellspacing="0" cellpadding="0">
+              <td style="padding: 10px 40px 40px 40px;">
+                <table width="100%" cellspacing="0" cellpadding="0" style="background: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06);">
                   ${rows}
                 </table>
               </td>
