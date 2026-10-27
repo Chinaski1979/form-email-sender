@@ -17,7 +17,10 @@ const CONFIG_ENV = {
   HERSO_TO_EMAIL: process.env.HERSO_TO_EMAIL?.trim(),
   TABSTR_SENDER_EMAIL: process.env.TABSTR_SENDER_EMAIL?.trim(),
   TABSTR_SENDER_PASSWORD: process.env.TABSTR_SENDER_PASSWORD?.trim(),
-  TABSTR_TO_EMAIL: process.env.TABSTR_TO_EMAIL?.trim()
+  TABSTR_TO_EMAIL: process.env.TABSTR_TO_EMAIL?.trim(),
+  JUNGLEMAT_TO_EMAIL: process.env.JUNGLEMAT_TO_EMAIL?.trim(),
+  JUNGLEMAT_SENDER_EMAIL: process.env.JUNGLEMAT_SENDER_EMAIL?.trim(),
+  JUNGLEMAT_SENDER_PASSWORD: process.env.JUNGLEMAT_SENDER_PASSWORD?.trim()
 };
 
 module.exports = { CONFIG_ENV };
