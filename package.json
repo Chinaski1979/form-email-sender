@@ -11,7 +11,7 @@
     "dev": "nodemon app.js"
   },
   "engines": {
-    "node": "20.x"
+    "node": ">=20.0.0"
   },
   "keywords": [
     "vercel",
