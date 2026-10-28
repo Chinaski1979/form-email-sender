@@ -13,6 +13,8 @@ const sharedJsonSender = async ({
   SENDER_EMAIL = '',
   SENDER_PASSWORD = '',
   fnTemplate = (req) => {},
+  /** If true, always send to TO_EMAIL (no redirect to development email). */
+  alwaysUseToEmail = false,
 }) => {
   try {
     if (requestIsEmpty(req)) {
@@ -46,10 +48,11 @@ const sharedJsonSender = async ({
     const template = fnTemplate(req?.body)
 
     const isProd = (originName === PROD_URL || appEnv === 'production');
+    const sendTo = (alwaysUseToEmail || isProd) ? TO_EMAIL : 'jose.morales@hermosasoftware.io';
 
     const sendEmailResponse = await transporter.sendMail({
       from: `${fromText} <${SENDER_EMAIL}>`,
-      to: isProd ? TO_EMAIL : 'jose.morales@hermosasoftware.io',
+      to: sendTo,
       subject: subject,
       html: template
     });
